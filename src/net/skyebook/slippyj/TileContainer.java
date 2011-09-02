@@ -9,19 +9,19 @@ import net.skyebook.slippyj.tile.Tile;
  * @author Skye Book
  *
  */
-public interface TileContainer {
+public interface TileContainer<T extends Tile>{
 
 	/**
 	 * 
 	 * @param tile
 	 */
-	public void addTile(Tile tile);
+	public void addTile(T tile);
 	
 	/**
 	 * 
 	 * @param tile
 	 */
-	public void removeTile(Tile tile);
+	public void removeTile(T tile);
 	
 	/**
 	 * 
