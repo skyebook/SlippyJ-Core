@@ -3,6 +3,8 @@
  */
 package net.skyebook.slippyj;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import net.skyebook.slippyj.tile.ITileMouseMotionListener;
 import net.skyebook.slippyj.tile.Tile;
 import net.skyebook.slippyj.tile.TileFactory;
@@ -25,6 +27,8 @@ public class Palette {
 	public static final String OSMSlippyServer = "http://tile.openstreetmap.org/";
 
 	private TileFactory tileFactory;
+	
+	private AtomicBoolean isUpdating = new AtomicBoolean(false);
 
 	/**
 	 * 
@@ -37,7 +41,8 @@ public class Palette {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void build(Coordinate center){
+	public void build(Coordinate center){
+		isUpdating.set(true);
 		// create the center tile
 		int[] centerXY = getTileXY(center);
 		//Tile centerTile = tileFactory.createTile(zoomLevel, centerXY[0], centerXY[1]);
@@ -66,6 +71,9 @@ public class Palette {
 		int startingY = centerXY[1]-numberYTiles;
 		int endingX = centerXY[0]+numberXTiles;
 		int endingY = centerXY[1]+numberYTiles;
+		
+		System.out.println("Creating X tiles from " + startingX + " to " + endingX);
+		System.out.println("Creating Y tiles from " + startingY + " to " + endingY);
 
 		for(int x=startingX; x<endingX; x++){
 			for(int y=startingY; y<endingY; y++){
@@ -84,10 +92,11 @@ public class Palette {
 					}
 				});
 				
-				System.out.println("Tile Created");
+				System.out.println("Tile {"+x+","+y+"} Created");
 				tileContainer.addTile(tile);
 			}
 		}
+		isUpdating.set(false);
 	}
 
 	private int[] getTileXY(Coordinate coordinate){
@@ -102,5 +111,8 @@ public class Palette {
 		int yTile = (int)Math.floor((1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * (1<<zoomLevel)) ;
 		return new int[]{xTile,yTile};
 	}
-
+	
+	public synchronized boolean isUpdating(){
+		return isUpdating.get();
+	}
 }
