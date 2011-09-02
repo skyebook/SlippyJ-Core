@@ -18,6 +18,7 @@ public class Palette {
 
 	private int zoomLevel;
 
+	@SuppressWarnings("rawtypes")
 	private TileContainer tileContainer;
 
 	public static final String TilesAtHomeServer = "http://tah.openstreetmap.org/Tiles/tile/";
@@ -28,12 +29,14 @@ public class Palette {
 	/**
 	 * 
 	 */
-	public Palette(Coordinate center, int zoomLevel, TileContainer tileContainer) {
+	public Palette(Coordinate center, int zoomLevel, TileContainer<Tile> tileContainer, TileFactory tileFactory) {
 		this.zoomLevel=zoomLevel;
 		this.tileContainer=tileContainer;
+		this.tileFactory=tileFactory;
 		build(center);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void build(Coordinate center){
 		// create the center tile
 		int[] centerXY = getTileXY(center);
@@ -66,12 +69,13 @@ public class Palette {
 
 		for(int x=startingX; x<endingX; x++){
 			for(int y=startingY; y<endingY; y++){
-				Tile tile = tileFactory.createTile(zoomLevel, x, y);
+				int xLocation=(tileContainer.getWidth()/2)+((x-centerXY[0])*tileSize)-(tileSize/2);
+				int yLocation=(tileContainer.getHeight()/2)+((y-centerXY[1])*tileSize)-(tileSize/2);
+				Tile tile = tileFactory.createTile(zoomLevel, x, y, xLocation, yLocation);
 				tile.setLocation(
-						(tileContainer.getWidth()/2)+((x-centerXY[0])*tileSize)-(tileSize/2),
-						(tileContainer.getHeight()/2)+((y-centerXY[1])*tileSize)-(tileSize/2)
+						xLocation,
+						yLocation
 				);
-				tileContainer.addTile(tile);
 				tile.addTileMouseMotionListener(new ITileMouseMotionListener() {
 					
 					@Override
@@ -79,6 +83,9 @@ public class Palette {
 						tileContainer.moveTiles(newX-oldX, newY-oldY);
 					}
 				});
+				
+				System.out.println("Tile Created");
+				tileContainer.addTile(tile);
 			}
 		}
 	}

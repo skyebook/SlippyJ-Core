@@ -22,5 +22,5 @@ public abstract class TileFactory{
 	 * @param y
 	 * @return
 	 */
-	public abstract Tile createTile(int zoomLevel, int x, int y);
+	public abstract Tile createTile(int zoomLevel, int x, int y, int xLocation, int yLocation);
 }
