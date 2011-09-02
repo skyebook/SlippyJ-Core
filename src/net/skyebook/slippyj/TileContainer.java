@@ -41,5 +41,9 @@ public interface TileContainer<T extends Tile>{
 	 * @param yDelta
 	 */
 	public void moveTiles(int xDelta, int yDelta);
+	
+	public boolean isXInverted();
+	
+	public boolean isYInverted();
 
 }
