@@ -69,8 +69,8 @@ public class Palette {
 
 		for(int x=startingX; x<endingX; x++){
 			for(int y=startingY; y<endingY; y++){
-				int xLocation=(tileContainer.getWidth()/2)+((x-centerXY[0])*tileSize)-(tileSize/2);
-				int yLocation=(tileContainer.getHeight()/2)+((y-centerXY[1])*tileSize)-(tileSize/2);
+				int xLocation=(tileContainer.isXInverted()?-1:1)*(tileContainer.getWidth()/2)+((x-centerXY[0])*tileSize)-(tileSize/2);
+				int yLocation=(tileContainer.isYInverted()?-1:1)*(tileContainer.getHeight()/2)+((y-centerXY[1])*tileSize)-(tileSize/2);
 				Tile tile = tileFactory.createTile(zoomLevel, x, y, xLocation, yLocation);
 				tile.setLocation(
 						xLocation,
