@@ -17,6 +17,8 @@
  */
 package net.skyebook.slippyj;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.skyebook.slippyj.tile.ITileMouseMotionListener;
@@ -43,22 +45,32 @@ public class Palette {
 	private TileFactory tileFactory;
 	
 	private AtomicBoolean isUpdating = new AtomicBoolean(false);
+	
+	private Executor builderThread;
 
 	/**
 	 * 
 	 */
-	public Palette(Coordinate center, int zoomLevel, TileContainer<Tile> tileContainer, TileFactory tileFactory) {
+	public Palette(final Coordinate center, int zoomLevel, TileContainer<Tile> tileContainer, TileFactory tileFactory) {
 		this.zoomLevel=zoomLevel;
 		this.tileContainer=tileContainer;
 		this.tileFactory=tileFactory;
-		build(center);
+		builderThread = Executors.newFixedThreadPool(1);
+		builderThread.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				build(center);
+			}
+		});
+		
 	}
 
 	@SuppressWarnings("unchecked")
 	public void build(Coordinate center){
 		isUpdating.set(true);
 		int[] centerXY = getTileXY(center);
-
+		
 		int halfWidth = tileContainer.getWidth()/2;
 		int halfHeight = tileContainer.getHeight()/2;
 
