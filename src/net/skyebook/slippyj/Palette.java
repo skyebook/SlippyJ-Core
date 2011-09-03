@@ -71,8 +71,15 @@ public class Palette {
 		isUpdating.set(true);
 		int[] centerXY = getTileXY(center);
 		
-		int halfWidth = tileContainer.getWidth()/2;
-		int halfHeight = tileContainer.getHeight()/2;
+		/* cache the width and height of the container to avoid inconsistencies
+		 * in the event that the container is changed while the build method is
+		 * running
+		 */
+		int widthOnBuildCall = tileContainer.getWidth();
+		int heightOnBuildCall = tileContainer.getHeight();
+		
+		int halfWidth = widthOnBuildCall/2;
+		int halfHeight = heightOnBuildCall/2;
 
 		int tileSize = 256;
 
@@ -99,8 +106,8 @@ public class Palette {
 
 		for(int x=startingX; x<endingX; x++){
 			for(int y=startingY; y<endingY; y++){
-				int xLocation=(tileContainer.isXInverted()?-1:1)*(tileContainer.getWidth()/2)+((x-centerXY[0])*tileSize)-(tileSize/2);
-				int yLocation=(tileContainer.isYInverted()?-1:1)*(tileContainer.getHeight()/2)+((y-centerXY[1])*tileSize)-(tileSize/2);
+				int xLocation=(tileContainer.isXInverted()?-1:1)*(widthOnBuildCall/2)+((x-centerXY[0])*tileSize)-(tileSize/2);
+				int yLocation=(tileContainer.isYInverted()?-1:1)*(heightOnBuildCall/2)+((y-centerXY[1])*tileSize)-(tileSize/2);
 				Tile tile = tileFactory.createTile(zoomLevel, x, y, xLocation, yLocation);
 				tile.setLocation(
 						xLocation,
