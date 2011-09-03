@@ -57,11 +57,7 @@ public class Palette {
 	@SuppressWarnings("unchecked")
 	public void build(Coordinate center){
 		isUpdating.set(true);
-		// create the center tile
 		int[] centerXY = getTileXY(center);
-		//Tile centerTile = tileFactory.createTile(zoomLevel, centerXY[0], centerXY[1]);
-		//centerTile.setLocation((tileContainer.getWidth()/2)-(centerTile.getWidth()/2), (tileContainer.getHeight()/2)-(centerTile.getHeight()/2));
-		//tileContainer.addTile(centerTile);
 
 		int halfWidth = tileContainer.getWidth()/2;
 		int halfHeight = tileContainer.getHeight()/2;
