@@ -69,6 +69,7 @@ public class Palette {
 	@SuppressWarnings("unchecked")
 	public void build(Coordinate center){
 		isUpdating.set(true);
+		tileContainer.removeAllTiles();
 		int[] centerXY = getTileXY(center);
 		
 		/* cache the width and height of the container to avoid inconsistencies
