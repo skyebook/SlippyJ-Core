@@ -38,6 +38,11 @@ public interface TileContainer<T extends Tile>{
 	public void removeTile(T tile);
 	
 	/**
+	 * Removes all tiles from the container
+	 */
+	public void removeAllTiles();
+	
+	/**
 	 * 
 	 * @return
 	 */
